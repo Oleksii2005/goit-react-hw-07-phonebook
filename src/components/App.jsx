@@ -1,14 +1,16 @@
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
 import { Section } from './Section/Section';
 import { Filter } from './Filter/Filter';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
-import { addContact, deleteContact, updateFilter } from '../redux/contactSlice';
-import { nanoid } from '@reduxjs/toolkit';
 import Notiflix from 'notiflix';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchContacts, addContact, deleteContact } from '../redux/operations';
+import { updateFilter } from '../redux/contactSlice';
+import { nanoid } from '@reduxjs/toolkit';
 
 export const App = () => {
-  const contacts = useSelector(state => state.contacts.contacts);
+  const contacts = useSelector(state => state.contacts.contacts.items);
   const filter = useSelector(state => state.contacts.filter);
   const dispatch = useDispatch();
 
@@ -38,6 +40,10 @@ export const App = () => {
   const onDelete = contactId => {
     dispatch(deleteContact(contactId));
   };
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   return (
     <>
